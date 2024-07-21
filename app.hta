@@ -1,0 +1,442 @@
+<html>
+  <head>
+    <meta http-equiv="x-ua-compatible" content="ie=11" />
+    <HTA:APPLICATION
+      ID="Company Deployment Manager"
+      ICON="Yahoo.ico"
+      MAXIMIZEBUTTON="no"
+      border="yes"
+      BORDERSTYLE="normal"
+      CAPTION="yes"
+      showInTaskbar="yes"
+      innerBorder="no"
+      scroll="no"
+      singleInstance="yes"
+      selection="no"
+      version="1.0"
+    />
+
+    <title>Company Deployment Manager</title>
+  </head>
+
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    #processTable {
+      font-family: arial, sans-serif;
+      font-size: 10pt;
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    #processTable td,
+    th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 3px;
+    }
+
+    #regForm {
+      background-color: #ffffff;
+      margin: 100px auto;
+      padding: 40px;
+      width: 70%;
+      min-width: 300px;
+    }
+
+    input {
+      padding: 10px;
+      width: 100%;
+      font-size: 17px;
+      font-family: "Courier New", Courier, monospace;
+      border: 1px solid #aaaaaa;
+    }
+
+    input.invalid {
+      background-color: #ffdddd;
+    }
+
+    .tab {
+      display: none;
+    }
+
+    .step {
+      height: 15px;
+      width: 15px;
+      margin: 0 2px;
+      background-color: #bbbbbb;
+      border: none;
+      border-radius: 50%;
+      display: inline-block;
+      opacity: 0.5;
+      border-radius: 100%;
+    }
+
+    /* Mark the active step: */
+    .step.active {
+      opacity: 1;
+    }
+
+    /* Mark the steps that are finished and valid: */
+    .step.finish {
+      background-color: #04aa6d;
+    }
+
+    .btn {
+      padding: 8px 20px;
+
+      border: 1px solid #aaaaaa;
+      border-radius: 5px;
+      background: green;
+      color: white;
+    }
+
+    button:disabled,
+    button[disabled] {
+      opacity: 0.5;
+      /* background: #ddd; */
+    }
+
+    .username {
+      font-size: 12px;
+      color: #969696;
+    }
+
+    .title {
+      font-weight: bold;
+      margin-bottom: 5px;
+      padding: 0;
+    }
+    .subtitle {
+      font-weight: normal;
+      margin: 0;
+      padding: 0;
+      color: #6e6e77;
+    }
+
+    .options {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      /* gap: 1rem; */
+      .options > * + * { margin-left: 1rem;}
+    }
+
+    .input-container {
+      position: relative;
+      height: 6rem;
+
+      flex-grow: 1;
+    }
+
+    .input-container input {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      margin: 0;
+      background: black;
+      cursor: pointer;
+      z-index: 2;
+      opacity: 0;
+    }
+
+    .input-container .radio-tile {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      gap: 4px;
+      border-radius: 8px;
+      transition: all 200ms ease;
+      border: 2px solid #f4f4f5;
+    }
+
+    .input-container svg {
+      color: black;
+      ;
+    }
+    .input-container label {
+      font-size: 0.80rem;
+      font-weight: 600;
+      
+      letter-spacing: 1px;
+    }
+
+    input:checked + .radio-tile {
+      
+      box-shadow: 0 0 2px black;
+      border: 1px solid black;
+    }
+
+    input:hover + .radio-tile,  input:hover + .radio-tile svg {
+      box-shadow: 0 0 4px black;
+      background-color: black;
+      color: white;
+      border: 2px solid black;
+    }
+
+    input:checked + .radio-tile svg, input:checked + .radio-tile label {
+      /* color: white */
+    }
+  </style>
+
+  <body>
+    <form id="regForm" action="">
+      <div class="tab">
+        Device Owner:
+        <p>
+          <input placeholder="username..." id="search" />
+        </p>
+        <p class="username" id="user">
+          Search for a user clicking on the search button
+        </p>
+      </div>
+      <div class="tab">
+        
+        <h2 class="title">Choose your device</h2>
+        <p class="subtitle">
+          Select the type of device you need for your department.
+        </p>
+        <div class="options">
+          <div class="input-container">
+            <input
+              type="radio"
+              id="options"
+              name="device"
+              value="workstation"
+              checked
+            />
+            <div class="radio-tile">
+              <svg
+                {...props}
+                xmlns="http://www.w3.org/2000/svg"
+                width="34"
+                height="34"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path
+                  d="M20 16V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v9m16 0H4m16 0 1.28 2.55a1 1 0 0 1-.9 1.45H3.62a1 1 0 0 1-.9-1.45L4 16"
+                />
+              </svg>
+              <label for="phone">Laptop</label>
+            </div>
+          </div>
+
+          <div class="input-container">
+            <input type="radio" id="options" name="device" value="workstation" />
+            <div class="radio-tile">
+              <svg
+                {...props}
+                xmlns="http://www.w3.org/2000/svg"
+                width="34"
+                height="34"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <rect width="14" height="8" x="5" y="2" rx="2" />
+                <rect width="20" height="8" x="2" y="14" rx="2" />
+                <path d="M6 18h2" />
+                <path d="M12 18h6" />
+              </svg>
+              <label for="phone">Workstation</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab">
+        Birthday:
+        <p><input placeholder="dd" oninput="this.className = ''" /></p>
+        <p><input placeholder="mm" oninput="this.className = ''" /></p>
+        <p><input placeholder="yyyy" oninput="this.className = ''" /></p>
+      </div>
+
+      <div style="overflow: auto;">
+        <div style="float: right;">
+          <button type="button" id="prevBtn" onclick="nextPrev(-1)" class="btn">
+            Previous
+          </button>
+          <button type="button" id="nextBtn" onclick="nextPrev(1)" class="btn">
+            Next
+          </button>
+        </div>
+      </div>
+
+      <!-- Circles which indicates the steps of the form: -->
+      <div style="text-align: center; margin-top: 40px;">
+        <span class="step"></span>
+        <span class="step"></span>
+        <span class="step"></span>
+      </div>
+    </form>
+
+    <script language="JavaScript">
+      var searchValue = "";
+      function getElementsByClassName(className) {
+        var allElements = document.getElementsByTagName("*");
+        var results = [];
+
+        for (var i = 0; i < allElements.length; i++) {
+          if (allElements[i].className === className) {
+            results.push(allElements[i]);
+          }
+        }
+
+        return results;
+      }
+
+      function consumeAPI(url, callback) {
+        // var xhr = new ActiveXObject("MSXML2.XMLHTTP");
+        // xhr.open("GET", url, true);
+
+        // xhr.onreadystatechange = function () {
+        //   if (xhr.readyState === 4) {
+        //     if (xhr.status === 200) {
+        //       callback(null, xhr.responseText); // Sucesso, passando resposta
+        //     } else {
+        //       callback(new Error("Erro na solicitação: " + xhr.status)); // Falha, passando erro
+        //     }
+        //   }
+        // };
+
+        // xhr.send();
+        setTimeout(function () {
+          // Simular uma resposta de API
+          var response = {
+            msg: "all good",
+            success: true,
+          };
+          // Chamar o callback com a resposta simulada
+          callback(null, response);
+        }, 10); // 2000 milissegundos = 2 segundos
+      }
+
+      function fixStepIndicator(n) {
+        // This function removes the "active" class of all steps...
+        var i;
+        var x = document.getElementsByClassName("step");
+
+        for (i = 0; i < x.length; i++) {
+          x[i].className = x[i].className.replace(" active", "");
+        }
+        //... and adds the "active" class to the current step:
+
+        x[n].className += " active";
+      }
+
+      function searchUser() {
+        consumeAPI("https://jsonplaceholder.typicode.com/todos/1", function (
+          error,
+          response
+        ) {
+          if (error) {
+            // alert(error);
+          } else {
+            // alert(response);
+          }
+          btnNext.disabled = false;
+        });
+
+        //alert(search.length);
+        return {
+          username: "robson.carvalho",
+          ou: "CN=Robson Carvalho, OU=Users,DC=contoso,DC=com",
+        };
+      }
+      function nextPrev(n) {
+        btnNext = document.getElementById("nextBtn");
+
+        var x = getElementsByClassName("tab");
+
+        if (n == 1 && !validateForm()) return false;
+
+        if (btnNext.innerHTML == "Search" && searchValue != "") {
+          btnNext.disabled = true;
+          user = searchUser();
+          isSearchDirty = false;
+
+          if (user) {
+            document.getElementById("user").innerHTML = user.ou;
+            document.getElementById("nextBtn").innerHTML = "Next";
+          }
+        } else if (user && searchValue != "") {
+          x[currentTab].style.display = "none";
+
+          currentTab = currentTab + n;
+          if (currentTab >= x.length) {
+            document.getElementById("regForm").submit();
+            return false;
+          }
+          showTab(currentTab);
+        } else {
+          alert("Please search for a user first!" + searchValue);
+        }
+        // return false;
+      }
+      // userHtml = document.getElementById("user").innerHTML = btnStatus;
+
+      function validateForm() {
+        return true;
+      }
+
+      function showTab(n) {
+        var elements = getElementsByClassName("tab");
+        elements[n].style.display = "block";
+
+        if (n === 0) {
+          document.getElementById("prevBtn").style.display = "none";
+        } else {
+          document.getElementById("prevBtn").style.display = "inline";
+        }
+
+        if (n == elements.length - 1) {
+          document.getElementById("nextBtn").innerHTML = "Submit";
+        } else {
+          if (user == "") {
+            document.getElementById("nextBtn").innerHTML = "Search";
+          } else {
+            document.getElementById("nextBtn").innerHTML = "Next";
+          }
+        }
+
+        fixStepIndicator(n);
+      }
+      var currentTab = 1; // Current tab is set to be the first tab (0)
+      var user = "";
+      var isSearchDirty = false;
+
+      showTab(currentTab); // Display the current tab
+
+      function Window_onLoad() {
+        // resize to quarter of screen area, centered
+        window.resizeTo(850, 600);
+        //window.moveTo(screen.availWidth/4,screen.availHeight/4);
+
+        var inputElement = document.getElementById("search");
+        if (inputElement) {
+          inputElement.addEventListener("input", function (event) {
+            searchValue = event.target.value;
+            document.getElementById("user").innerHTML =
+              "Search for ..." + searchValue;
+            document.getElementById("nextBtn").innerHTML = "Search";
+            isSearchDirty = true;
+          });
+        }
+      }
+
+      window.onload = Window_onLoad;
+    </script>
+  </body>
+</html>
